@@ -1,8 +1,12 @@
 'use client'
+// 👇 must be first — enables PIXI in strict CSP (no eval)
+import 'pixi.js/unsafe-eval'
+
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import * as PIXI from 'pixi.js'
 import { Link } from 'react-router-dom'
 import SiteFooter from './components/SiteFooter.jsx'
+
 
 
 /* =========================
