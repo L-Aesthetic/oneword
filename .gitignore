@@ -1,0 +1,19 @@
+# dependencies & build
+node_modules/
+dist/
+.vite/
+*.log
+
+# OS cruft
+.DS_Store
+
+# env & local data
+.env
+server/.env
+server/data/
+*.db
+*.db.json
+
+# editor caches
+.vscode/
+.idea/

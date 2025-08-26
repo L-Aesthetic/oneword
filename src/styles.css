@@ -1,0 +1,213 @@
+:root {
+  --bg:#fff; --fg:#111; --muted:#666; --gold:#FFD866;
+  --pill-bg:#f4f5f6; --pill-fg:#222; --pill-accent:#111;
+  --seg-bg:#f4f5f6; --seg-fg:#222; --seg-active:#111;
+  --outline: rgba(0,0,0,0.08);
+}
+
+footer.footer { position: relative; z-index: 5; }
+
+* { box-sizing: border-box; }
+html, body, #root { height:100%; margin:0; }
+body {
+  background:var(--bg); color:var(--fg);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu;
+}
+
+/* Layout */
+.container { max-width:1120px; margin:0 auto; padding:24px; }
+.row { display:flex; align-items:center; justify-content:space-between; gap:16px; }
+.stack-s { flex-wrap:wrap; }
+
+/* Header */
+.header { padding:24px 24px 8px; border-bottom:0; box-shadow:none; }
+.brand { font-weight:600; font-size:30px; letter-spacing:0.2px; }
+.hdr-right-wrap { gap:12px; }
+.hdr-right { display:flex; align-items:center; gap:10px; }
+/* Remove underline from the OneWord title/link */
+.brand a {
+  color: inherit;
+  text-decoration: none;
+}
+.brand a:hover,
+.brand a:focus {
+  text-decoration: none;
+  opacity: 0.9; /* subtle feedback */
+}
+
+
+/* Live indicator */
+.live { display:flex; align-items:center; gap:8px; font-size:13px; color:var(--muted); }
+.live__dot { width:8px; height:8px; border-radius:50%; display:inline-block; }
+.live__dot.is-up { background:#22c55e; }
+.live__dot.is-down { background:#ef4444; }
+
+/* Geo button */
+.geo__btn {
+  display:inline-flex; align-items:center; gap:6px;
+  padding:8px 10px; border-radius:10px; border:1px solid var(--outline);
+  background:#fff; cursor:pointer; font-size:13px;
+}
+.geo__btn:hover { background:#fafafa; }
+.geo__pin { font-size:14px; line-height:1; }
+
+/* Controls */
+.controlbar {
+  display:flex; align-items:center; justify-content:space-between;
+  gap:16px; padding:6px 0 0 0;
+}
+.controlbar__right {
+  display:flex; align-items:center; gap:12px;
+  /* keep pills on the same baseline */
+}
+.group-range { margin-right:8px; } /* extra breathing room before emotions */
+
+/* Segmented (zoom) */
+.segmented {
+  display:inline-flex; align-items:center; gap:0; padding:3px; border-radius:12px;
+  background:var(--seg-bg); border:1px solid var(--outline);
+}
+.segmented__btn {
+  appearance:none; border:0; background:transparent; cursor:pointer;
+  padding:8px 12px; border-radius:10px; font-size:13px; color:var(--seg-fg);
+}
+.segmented__btn.is-active { background:#fff; color:var(--seg-active); box-shadow:0 1px 2px rgba(0,0,0,0.04); }
+
+/* Pills */
+.pills { display:flex; align-items:center; gap:8px; }
+.pill {
+  appearance:none; border:1px solid var(--outline); background:var(--pill-bg);
+  color:var(--pill-fg); cursor:pointer; padding:8px 12px; border-radius:999px;
+  font-size:13px; display:inline-flex; align-items:center; line-height:1;
+}
+.pill.is-active { background:#fff; border-color:#111; color:#111; }
+
+/* Form */
+.controls select, .input, .button {
+  border:1px solid rgba(0,0,0,0.1);
+  border-radius:12px; padding:10px 12px; background:#fff; font-size:14px;
+}
+.input { flex:1; }
+.button { background:#000; color:#fff; cursor:pointer; }
+.button[disabled] { opacity:0.5; cursor:default; }
+
+/* Canvas */
+.canvasWrap {
+  border-radius:20px; overflow:hidden; background:#fff;
+  box-shadow:0 1px 6px rgba(0,0,0,0.04); min-height:460px;
+  position: relative;           /* ensure it creates its own stacking context */
+  z-index: 0;
+  margin-bottom: 16px;          /* give the footer breathing room */
+}
+.canvasWrap canvas {
+  touch-action: none;   /* enables pointermove/drag on touch devices */
+  user-select: none;
+  position: relative;   /* keep canvas within its stacking context */
+  z-index: 0;
+  display: block;
+}
+
+/* Banners & footer */
+.banner { padding:10px 12px; border-radius:10px; background:#fff8d6; color:#7a5b00; margin-top:8px; font-size:13px; }
+.banner.error { background:#ffe2e2; color:#7a0b0b; }
+
+/* Base footer styling */
+.footer { padding:24px; font-size:13px; color:var(--muted); }
+
+/* --- FOOTER VISIBILITY FIX --- */
+footer.footer {
+  position: relative;            /* sits above canvas */
+  z-index: 5;                    /* higher than .canvasWrap */
+  background: #fff;              /* solid backdrop over any WebGL content */
+  border-top: 1px solid #eee;
+  margin-top: 24px;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+/* Stretch footer links across the container in equal columns */
+.footer__nav {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  width: 100%;
+}
+.footer__nav a {
+  display: block;
+  text-align: center;
+  padding: 10px 0;
+  color: #111;
+  text-decoration: underline; /* keep underline in footer links */
+}
+@media (max-width: 820px) {
+  .footer__nav { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+
+/* Remove unintended divider (safety) */
+.header { border-bottom:0 !important; box-shadow:none !important; }
+.header + .container, .controlbar { border-top:0 !important; }
+.header::after { content:none !important; }
+
+/* Responsive */
+@media (max-width:820px){
+  .controlbar { flex-direction:column; align-items:stretch; gap:12px; }
+  .controlbar__right { justify-content:flex-start; flex-wrap:wrap; gap:10px; }
+}
+@media (max-width:640px){
+  .row { flex-direction:column; align-items:stretch; }
+  .hdr-right-wrap { flex-direction:row; align-items:center; justify-content:space-between; }
+}
+
+/* ===== Consistent control heights & perfect alignment ===== */
+:root {
+  --control-h: 38px;              /* one height to rule them all */
+}
+
+/* Header right: Live + Geo perfectly centered */
+.hdr-right { display:flex; align-items:center; gap:12px; }
+.live      { display:flex; align-items:center; height:var(--control-h); }
+.geo__btn  { height:var(--control-h); display:inline-flex; align-items:center; gap:6px; }
+
+/* Input row: make input and button same height */
+.input  { height:var(--control-h); padding:0 12px; }
+.button { height:var(--control-h); padding:0 14px; display:inline-flex; align-items:center; }
+
+/* Zoom segmented: same height as pills */
+.segmented        { display:inline-flex; align-items:center; padding:2px; }
+.segmented__btn   { height:var(--control-h); padding:0 12px; display:flex; align-items:center; }
+
+/* Pills (Range & Emotion): same height & baseline */
+.pills { display:flex; align-items:center; gap:4px; }
+.pill  { height:var(--control-h); padding:0 12px; display:inline-flex; align-items:center; }
+
+/* Controlbar layout: keep everything on the same baseline */
+.controlbar        { display:flex; align-items:center; justify-content:space-between; gap:16px; }
+.controlbar__right { display:flex; align-items:center; gap:10px; }
+
+/* Add breathing room between Range and Emotion */
+.group-range { margin-right:10px; }
+
+/* Tiny optical nudge so the 📍 looks centered */
+.geo__pin { transform: translateY(-1px); }
+
+/* Responsive fallback (unchanged behavior, just tidy wrap) */
+@media (max-width:820px){
+  .controlbar { flex-direction:column; align-items:stretch; row-gap:10px; }
+  .controlbar__right { flex-wrap:wrap; }
+}
+
+/* Extra space beneath the title/header */
+.header {
+  margin-bottom: 20px;   /* tweak this number to taste */
+}
+
+/* Slightly more space on larger screens */
+@media (min-width: 900px) {
+  .header { margin-bottom: 28px; }
+}
+
+/* Nudge the first container (the one with the input) down a bit */
+.header + .container {
+  margin-top: 8px;
+}
