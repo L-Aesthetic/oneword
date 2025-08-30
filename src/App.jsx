@@ -1727,8 +1727,8 @@ cooldown.set(tag, COOLDOWN_FRAMES);
    const W = app.renderer.width, H = app.renderer.height
 
    function addToParticleContainer(pc, sprite) {
-  if (pc.addParticle) pc.addParticle(sprite);   // v8
-  else pc.addChild?.(sprite);                   // v7/v6
+  // Since we're using regular Container, just use addChild
+  pc.addChild?.(sprite);
 }
 
 
@@ -2050,13 +2050,13 @@ if (!densWrap) {
 }
 densWrap.alpha = 1;
 
-// 2) Particle container with v8/v7 compatibility
+// 2) Use regular Container instead of ParticleContainer to avoid unsafe-eval issues
 let dens = densityRef.current;
 if (!dens) {
-  const PC = PIXI.ParticleContainer;
-  dens = PC
-    ? new PC(MAX_POINTS, { position:true, scale:true, alpha:true, tint:true })
-    : new PIXI.Container(); // fallback if PC not available
+  // ParticleContainer has issues with the unsafe-eval polyfill in PIXI v8
+  // Use regular Container as it performs well enough for this use case
+  dens = new PIXI.Container();
+  dens.sortableChildren = false; // optimize for particle-like usage
   densityRef.current = dens;
   densWrap.addChild(dens);
 }
@@ -2066,8 +2066,7 @@ const dotTex = makeRadialDotTex(app);
 while (densityPoolRef.current.length < MAX_POINTS) {
   const spr = new PIXI.Sprite(dotTex);
   spr.visible = false;
-  if (dens.addParticle) dens.addParticle(spr);    // v8
-  else dens.addChild?.(spr);                      // v7/v6
+  dens.addChild(spr);  // regular Container
   densityPoolRef.current.push(spr);
 }
 let poolIdx = 0;
